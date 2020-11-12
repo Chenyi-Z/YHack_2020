@@ -1,25 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 
-function App() {
+import GoogleMapReact from 'google-map-react'
+// import 'google-map-react/dist/index.css'
+
+import WATERLOO_CENTER from './const/waterloo_center';
+
+import Marker from './components/Marker';
+import { thisExpression } from '@babel/types';
+
+const Wrapper = styled.main`
+  width: 100%;
+  height: 100%;
+`;
+
+const App = () => {
+  const [places, setPlaces] = useState([])
+
+  const fetchPlaces = async () => {
+    fetch('places.json')
+    .then((response) => response.json())
+    .then((data) => setPlaces(data.results))
+  }
+
+  useEffect(() => {
+    fetchPlaces();
+  }, [])
+
+  if (!places || places.length === 0) {
+    return null;
+  }
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Wrapper>
+      <GoogleMapReact
+        defaultZoom={15}
+        defaultCenter={WATERLOO_CENTER}
+      >
+        {places.map((place) => (
+          <Marker
+            key={place.id}
+            text={place.name}
+            lat={place.geometry.location.lat}
+            lng={place.geometry.location.lng}
+          />
+        ))}
+
+      </GoogleMapReact>
+    </Wrapper>
+  )
 }
 
-export default App;
+export default App

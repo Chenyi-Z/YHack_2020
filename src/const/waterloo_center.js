@@ -1,0 +1,1 @@
+export default [43.47, -80.52];
