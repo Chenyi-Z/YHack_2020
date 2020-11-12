@@ -34,7 +34,7 @@ const App = () => {
   return (
     <Wrapper>
       <GoogleMapReact
-        defaultZoom={15}
+        defaultZoom={14}
         defaultCenter={WATERLOO_CENTER}
       >
         {places.map((place) => (
